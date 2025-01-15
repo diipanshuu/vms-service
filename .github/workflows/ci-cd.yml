@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+# Trigger workflow on push to main branch or pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job 1: Build and Test the Application
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out code from the repository
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 3: Cache Maven dependencies (optional for faster builds)
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Step 4: Build and test with Maven
+      - name: Build with Maven
+        run: mvn clean install
+
+  # Job 2: Deploy the Application (Optional)
+  deploy:
+    needs: build # Ensure this job runs only after build completes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Application
+        run: |
+          echo "Deploying the application..."

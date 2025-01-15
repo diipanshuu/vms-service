@@ -45,7 +45,6 @@ jobs:
           SPRING_DATASOURCE_URL: ${{ vars.SPRING_DATASOURCE_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           SPRING_DATASOURCE_PASSWORD: ${{ vars.SPRING_DATASOURCE_PASSWORD }}
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
         run: mvn test -Dspring.profiles.active=prod
 
   # Job 2: Deploy the Application (Optional)
